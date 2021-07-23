@@ -1,4 +1,4 @@
-# SWaveRIC: Swell & Wind Wave Radar Inversion Code (2 beams)
+# SWaveRIC: Swell & Wind Wave Radar Inversion Code (2 beams from 2 HF radars or from 1 single HF radar)
 (see Al-Attabi, Voulgaris and Conley (2020), doi:10.1175/JTECH-D-20-0186.1)  
 
 This is the code described in Al-Attabi et al. (2021) for the inversion of the 2nd-order of a Doppler spectrum from HF radar systems.  This is a radar wave inversion technique that treats swell and wind waves separately. Its application requires two Doppler spectra corresponding to two different radar beams (two beams from two different HF radars  or from a single radar). 
