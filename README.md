@@ -24,11 +24,11 @@ The files are located in three directories
 -It contains the main functions used to run the inversion (ConfigRWIC.m, masterRadarWIC.m, RadarWIC.m);  
 -file RWIC_Contents.html contains inflormation about the functions included in the package;  
 -master_testing.m is an example using the functions to recreate the spectra in the paper, figure 10;;
-- WaveRIC/lib  
+- SWaveRIC/lib  
 It contains a number of functions called by the main function
-- WaveRIC/html and WaveRIC/lib/html  
+- SWaveRIC/html and WaveRIC/lib/html  
 It contains explanations for each function in html files. These are called from RWIC_Contents.html  
-- WaveRIC/data  
+- SWaveRIC/data  
 It contains the data files used by master_testing.m for running examples from the Alattabi et al (2019) paper; Events A to H. It recreates Figure 11 in the paper.
 
 List of Files  
