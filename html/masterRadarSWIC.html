@@ -1,0 +1,236 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>masterRadarSWIC.m</title><meta name="generator" content="MATLAB 9.10"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2021-07-27"><meta name="DC.source" content="masterRadarSWIC.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>masterRadarSWIC.m</h1><!--introduction--><pre>This is an example master script that shows how to utilize the RadarSWIC.m  model.
+It uses examples of spectra from two beams of two HF systems (or two beams from one HF radar system).
+the files are located in subdirectory 'data/'
+More adjustable parameters are located in script configRSWIC.m
+see comments inside the script for more details.</pre><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Copyright</a></li><li><a href="#2">HF radar and inversion specific parameters</a></li><li><a href="#3">Inversion Model Calibration coefficients for wind-wave inversion (see Alattabi et al., 2021)</a></li><li><a href="#4">Inversion Model Inputs:</a></li><li><a href="#5">radar beam angles needed for swell inversion</a></li><li><a href="#6">Load your HF radar spectrum input</a></li><li><a href="#7">Inversion Model Output:</a></li><li><a href="#8">Load config params</a></li><li><a href="#9">Swell Wave Inversion - RadarSWIC (see Alattabi et al., 2021)</a></li><li><a href="#10">wave parameters</a></li><li><a href="#11">Display wave parameters</a></li></ul></div><h2 id="1">Copyright</h2><pre>2021 Zaid Alattabi, Douglas Cahl, George Voulgaris</pre><pre>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</pre><pre>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</pre><pre>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.</pre><h2 id="2">HF radar and inversion specific parameters</h2><pre>note: HF/VHF radar operating frequency is set in ConfigRSWIC.m</pre><pre>The inversion is very sensitive to the swell cutoff frequency fc.
+fc = 0.12 better for G, fc = 0.11 better for F</pre><pre class="codeinput">fc     = 0.115;  <span class="comment">% frequency (in Hz) separating swell from wind waves region, it is calculated based on wind speed</span>
+depth  = 53.8;   <span class="comment">% water depth of inversion location (meters)</span>
+jswaproll = 1;   <span class="comment">% =1 apply JONSWAP roll off below fc; =0 forces inversion to zero below fc</span>
+switc1 = 1;      <span class="comment">% switch for avoid Bragg peak (switc1=1), or include all data below fc (switc1=999)</span>
+</pre><h2 id="3">Inversion Model Calibration coefficients for wind-wave inversion (see Alattabi et al., 2021)</h2><pre class="codeinput">aw     = 0.3;    <span class="comment">% wind cal. coefficient used for wind inversion</span>
+sigma  = 0.011;  <span class="comment">% swell spectral width coefficient (empirical fit) - for creating a Gaussian swell spectrum</span>
+</pre><h2 id="4">Inversion Model Inputs:</h2><pre>PXY1         - Doppler spectrum from beam1                        (in dB)
+PXY2         - Doppler spectrum from beam2                        (in dB)
+freq         - frequency of the radar Doppler spectrum            (in Hz)
+f            - Wave frequency                                     (in Hz)
+fc           - frequency separating                               (in Hz)
+depth        - depth at which location radar data is used         (in m)
+th           - range of directional distribution (-180 to 180)    (in deg)
+wspd         - wind speed (at 10m elevation)                      (in m/s)
+fr           - HF radar operating frequency                       (in Mhz)
+beam1        - radar beam angle at which PXY1 is collected        (in deg)
+beam2        - radar beam angle at which PXY2 is collected        (in deg)</pre><h2 id="5">radar beam angles needed for swell inversion</h2><pre class="codeinput">beam1 = 78.28; <span class="comment">% Pen beam angle for PXY1</span>
+beam2 = 178.2; <span class="comment">% Per beam angle for PXY2</span>
+</pre><h2 id="6">Load your HF radar spectrum input</h2><pre>load(spec_site1);         % load Doppler spectrum file from radar (freq,PXY1)
+load(spec_site2);         % load Doppler spectrum file from radar (freq,PXY2)
+load(wspd)                % load wind speed (optional)</pre><h2 id="7">Inversion Model Output:</h2><pre>Sf        - 1D- Wave energy spectral density (S(f))
+Df        -  Wave directional as fucntion of wave frequncy (D(f))
+Sfth      - 2D- directional wave spectrum (S(f,theta))
+Hsw       - Root Mean sSuare (RMS) Swell wave height (Swell Hrms)
+Fs        - Swell wave frequency
+Ths       - Swell Wave direction
+params_x  = [Hrms, fp, fm, Thetap, Thetam]
+            where x (= w,s or t) denotes the part of spectrum so that:
+            w  for wind waves:       Sfw, thw, params_w
+            s  for swell waves:      Sfs, n/a, params_s
+            h  for combined (total): Sfh, thw, params_h</pre><h2 id="8">Load config params</h2><pre class="codeinput">ConfigRSWIC;
+<span class="keyword">if</span> ~exist(<span class="string">'wspd'</span>,<span class="string">'var'</span>) <span class="comment">% check for wind speed data</span>
+    wspd = [];
+<span class="keyword">end</span>
+</pre><h2 id="9">Swell Wave Inversion - RadarSWIC (see Alattabi et al., 2021)</h2><pre class="codeinput">[Df,Sf,Sfth,Fs,Hsw,Ths,Ths_err] = RadarSWIC(freq,PXY1,PXY2,f,fr,aw,sigma,fc,jswaproll,beam1,beam2,depth,th,wspd,switc1);
+<span class="comment">% disp(Ths_err) % estimate of uncertainty in swell propagation direction</span>
+</pre><h2 id="10">wave parameters</h2><pre class="codeinput">[paramsT,paramsS,paramsW] = waveparams3(fc,Sf,f,Df); <span class="comment">% [Total, Swell (f&lt;fc), Wind (f&gt;fc)]</span>
+paramsL = [Hsw,Fs,Fs,Ths,Ths]; <span class="comment">% Wave params from Lipa method</span>
+</pre><h2 id="11">Display wave parameters</h2><pre class="codeinput">Comment1=<span class="string">'Swell Wave Inversion model RadarSWIC as described in Alattabi et al (2021)'</span>;
+Comment2=[<span class="string">'Calibration factors: aw = '</span>,num2str(round(aw,2)),];
+Comment3=[<span class="string">'Swell broadening sigma = '</span>,num2str(round(sigma,3)),<span class="string">' Swell/Wind fc(Hz)='</span>,num2str(round(fc,2))];
+disp(Comment1)
+disp(Comment2)
+disp(Comment3)
+X0 = sprintf(<span class="string">'%s'</span>,<span class="string">'               Hs    fp   fm   th_p  th_m'</span>);
+X1 = sprintf(<span class="string">'%s %2.2f  %2.2f %2.2f %5.1f %5.1f'</span>,<span class="string">'Wind       : '</span>,paramsW);
+X2 = sprintf(<span class="string">'%s %2.2f  %2.2f %2.2f %5.1f %5.1f'</span>,<span class="string">'Swell      : '</span>,paramsS);
+X3 = sprintf(<span class="string">'%s %2.2f  %2.2f %2.2f %5.1f %5.1f'</span>,<span class="string">'Total      : '</span>,paramsT);
+X4 = sprintf(<span class="string">'%s %2.2f  %2.2f %2.2f %5.1f %5.1f'</span>,<span class="string">'Swell_Lipa : '</span>,paramsL);
+disp(X0)
+disp(X4)
+disp(X3)
+disp(<span class="string">'Wave Partitions'</span>)
+disp(X1)
+disp(X2)
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2021a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% masterRadarSWIC.m
+%
+%  This is an example master script that shows how to utilize the RadarSWIC.m  model.
+%  It uses examples of spectra from two beams of two HF systems (or two beams from one HF radar system).
+%  the files are located in subdirectory 'data/'
+%  More adjustable parameters are located in script configRSWIC.m
+%  see comments inside the script for more details.
+%
+%% Copyright 
+%  2021 Zaid Alattabi, Douglas Cahl, George Voulgaris
+%
+%  This program is free software: you can redistribute it and/or modify
+%  it under the terms of the GNU General Public License as published by
+%  the Free Software Foundation, either version 3 of the License, or
+%  (at your option) any later version.
+%
+%  This program is distributed in the hope that it will be useful,
+%  but WITHOUT ANY WARRANTY; without even the implied warranty of
+%  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%  GNU General Public License for more details.
+%
+%  You should have received a copy of the GNU General Public License
+%  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+%
+%% HF radar and inversion specific parameters
+%  note: HF/VHF radar operating frequency is set in ConfigRSWIC.m
+%
+%  The inversion is very sensitive to the swell cutoff frequency fc. 
+%  fc = 0.12 better for G, fc = 0.11 better for F
+fc     = 0.115;  % frequency (in Hz) separating swell from wind waves region, it is calculated based on wind speed 
+depth  = 53.8;   % water depth of inversion location (meters) 
+jswaproll = 1;   % =1 apply JONSWAP roll off below fc; =0 forces inversion to zero below fc
+switc1 = 1;      % switch for avoid Bragg peak (switc1=1), or include all data below fc (switc1=999)
+%% Inversion Model Calibration coefficients for wind-wave inversion (see Alattabi et al., 2021)
+aw     = 0.3;    % wind cal. coefficient used for wind inversion
+sigma  = 0.011;  % swell spectral width coefficient (empirical fit) - for creating a Gaussian swell spectrum  
+%% Inversion Model Inputs:
+%  PXY1         - Doppler spectrum from beam1                        (in dB)
+%  PXY2         - Doppler spectrum from beam2                        (in dB)
+%  freq         - frequency of the radar Doppler spectrum            (in Hz)  
+%  f            - Wave frequency                                     (in Hz)
+%  fc           - frequency separating                               (in Hz) 
+%  depth        - depth at which location radar data is used         (in m) 
+%  th           - range of directional distribution (-180 to 180)    (in deg)
+%  wspd         - wind speed (at 10m elevation)                      (in m/s)
+%  fr           - HF radar operating frequency                       (in Mhz)
+%  beam1        - radar beam angle at which PXY1 is collected        (in deg)
+%  beam2        - radar beam angle at which PXY2 is collected        (in deg)
+%% radar beam angles needed for swell inversion
+beam1 = 78.28; % Pen beam angle for PXY1
+beam2 = 178.2; % Per beam angle for PXY2
+%% Load your HF radar spectrum input
+%  load(spec_site1);         % load Doppler spectrum file from radar (freq,PXY1)
+%  load(spec_site2);         % load Doppler spectrum file from radar (freq,PXY2)
+%  load(wspd)                % load wind speed (optional)
+%% Inversion Model Output:
+%  Sf        - 1D- Wave energy spectral density (S(f))
+%  Df        -  Wave directional as fucntion of wave frequncy (D(f))
+%  Sfth      - 2D- directional wave spectrum (S(f,theta))
+%  Hsw       - Root Mean sSuare (RMS) Swell wave height (Swell Hrms)
+%  Fs        - Swell wave frequency 
+%  Ths       - Swell Wave direction
+%  params_x  = [Hrms, fp, fm, Thetap, Thetam]
+%              where x (= w,s or t) denotes the part of spectrum so that:
+%              w  for wind waves:       Sfw, thw, params_w
+%              s  for swell waves:      Sfs, n/a, params_s
+%              h  for combined (total): Sfh, thw, params_h
+%% Load config params
+ConfigRSWIC;
+if ~exist('wspd','var') % check for wind speed data
+    wspd = [];
+end
+%% Swell Wave Inversion - RadarSWIC (see Alattabi et al., 2021)
+[Df,Sf,Sfth,Fs,Hsw,Ths,Ths_err] = RadarSWIC(freq,PXY1,PXY2,f,fr,aw,sigma,fc,jswaproll,beam1,beam2,depth,th,wspd,switc1);
+% disp(Ths_err) % estimate of uncertainty in swell propagation direction
+%% wave parameters
+[paramsT,paramsS,paramsW] = waveparams3(fc,Sf,f,Df); % [Total, Swell (f<fc), Wind (f>fc)]
+paramsL = [Hsw,Fs,Fs,Ths,Ths]; % Wave params from Lipa method
+%% Display wave parameters
+Comment1='Swell Wave Inversion model RadarSWIC as described in Alattabi et al (2021)';
+Comment2=['Calibration factors: aw = ',num2str(round(aw,2)),];
+Comment3=['Swell broadening sigma = ',num2str(round(sigma,3)),' Swell/Wind fc(Hz)=',num2str(round(fc,2))];
+disp(Comment1)
+disp(Comment2)
+disp(Comment3)
+X0 = sprintf('%s','               Hs    fp   fm   th_p  th_m');
+X1 = sprintf('%s %2.2f  %2.2f %2.2f %5.1f %5.1f','Wind       : ',paramsW);
+X2 = sprintf('%s %2.2f  %2.2f %2.2f %5.1f %5.1f','Swell      : ',paramsS);
+X3 = sprintf('%s %2.2f  %2.2f %2.2f %5.1f %5.1f','Total      : ',paramsT);
+X4 = sprintf('%s %2.2f  %2.2f %2.2f %5.1f %5.1f','Swell_Lipa : ',paramsL);
+disp(X0)
+disp(X4)
+disp(X3)
+disp('Wave Partitions')
+disp(X1)
+disp(X2)
+##### SOURCE END #####
+--></body></html>

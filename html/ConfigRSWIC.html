@@ -1,0 +1,161 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>ConfigRSWIC.m</title><meta name="generator" content="MATLAB 9.10"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2021-07-27"><meta name="DC.source" content="ConfigRSWIC.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>ConfigRSWIC.m</h1><!--introduction--><p>Configuration file that contains all adjustable parameters for swell and the Radar Wave Inversion Code (RWIC)</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Copyright</a></li><li><a href="#2">HFR System details</a></li><li><a href="#3">Parameters defining details of analysis to be used</a></li><li><a href="#4">Parameters defining where to look for swell and second order spectra</a></li><li><a href="#5">Removes energy at around 0 Hz (+/-flim)</a></li><li><a href="#6">Quality Control for 1st and 2nd order sidbands</a></li><li><a href="#7">Inversion output resolution</a></li></ul></div><h2 id="1">Copyright</h2><pre>2021 Zaid Alattabi, Douglas Cahl, George Voulgaris</pre><pre>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</pre><pre>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</pre><pre>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.</pre><h2 id="2">HFR System details</h2><pre class="codeinput"><span class="keyword">global</span> g fr
+fr      = 12;                       <span class="comment">% HFR operating frequency in MHz</span>
+g       = 9.81;                     <span class="comment">% Gravity acceleration (m/s2)</span>
+lbragg  = 299.8/2/fr;               <span class="comment">% Bragg wavelength (m)</span>
+fbragg  = sqrt(g*2*pi/lbragg)/2/pi; <span class="comment">% Bragg frequency (Hz)</span>
+k0      = 2*pi/(2*lbragg);          <span class="comment">% Radar wavenumber (rads/m)</span>
+</pre><h2 id="3">Parameters defining details of analysis to be used</h2><pre class="codeinput">dom          = 1;           <span class="comment">% use only the side with the largest Bragg peak (for wind and Allatabi swell)</span>
+                            <span class="comment">% when the difference between the two peaks is &lt;3dB then use both sides.</span>
+peak_diff_db = 3;           <span class="comment">% for use with dom = 1, the max peak difference to use both peaks</span>
+gaus_fit     = 1;           <span class="comment">% fit gaussian for Bragg integral halfwidth</span>
+maxv         = 2;           <span class="comment">% Max velocity (in m/s) defining the search region for Bragg peaks</span>
+np           = 5;           <span class="comment">% number of points on each side of Bragg peak used for Bragg peak estimation</span>
+maxdf        = maxv/lbragg; <span class="comment">% Maximum Doppler shift expected (used to search for Bragg peaks, given maxv)</span>
+</pre><h2 id="4">Parameters defining where to look for swell and second order spectra</h2><pre class="codeinput">Highf   = 0.35;      <span class="comment">% Maximum wave freq (Hz); defines the second order upper limit</span>
+Lowf    = 0.025;     <span class="comment">% Minimum wave freq (Hz); it defines the limit between 1st and 2nd order Doppler spectra</span>
+minf    = 0.02;      <span class="comment">% Min halfwidth of Bragg Peak</span>
+</pre><h2 id="5">Removes energy at around 0 Hz (+/-flim)</h2><p>This is a common issue in HF systems with high energy at 0 Hz (DC frequencies) effects inner sidebands only</p><pre class="codeinput">flim = 0.046; <span class="comment">% Hz (Default 0.046 Hz)</span>
+</pre><h2 id="6">Quality Control for 1st and 2nd order sidbands</h2><pre class="codeinput">snr1    = 10;   <span class="comment">% Threshold singal to noise ratio of 1st order Bragg peaks</span>
+snr2    = 5;    <span class="comment">% Threshold singal to noise ratio of 2nd order sidebnfs peaks</span>
+dSigma  = 2;    <span class="comment">% ratio of 1st order Bragg peaks and 2nd order peaks</span>
+</pre><h2 id="7">Inversion output resolution</h2><pre class="codeinput">dth = 6;                <span class="comment">% in Degrees</span>
+df  = 0.005;            <span class="comment">% in Hz</span>
+th  = dth:dth:360;
+f   = Lowf:df:Highf;
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2021a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% ConfigRSWIC.m
+% Configuration file that contains all adjustable parameters for swell and 
+% the Radar Wave Inversion Code (RWIC)
+%
+%% Copyright 
+%  2021 Zaid Alattabi, Douglas Cahl, George Voulgaris
+%
+%  This program is free software: you can redistribute it and/or modify
+%  it under the terms of the GNU General Public License as published by
+%  the Free Software Foundation, either version 3 of the License, or
+%  (at your option) any later version.
+%
+%  This program is distributed in the hope that it will be useful,
+%  but WITHOUT ANY WARRANTY; without even the implied warranty of
+%  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%  GNU General Public License for more details.
+%
+%  You should have received a copy of the GNU General Public License
+%  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+%
+%% HFR System details
+global g fr
+fr      = 12;                       % HFR operating frequency in MHz
+g       = 9.81;                     % Gravity acceleration (m/s2)
+lbragg  = 299.8/2/fr;               % Bragg wavelength (m)
+fbragg  = sqrt(g*2*pi/lbragg)/2/pi; % Bragg frequency (Hz)
+k0      = 2*pi/(2*lbragg);          % Radar wavenumber (rads/m)
+
+%% Parameters defining details of analysis to be used
+dom          = 1;           % use only the side with the largest Bragg peak (for wind and Allatabi swell)
+                            % when the difference between the two peaks is <3dB then use both sides.
+peak_diff_db = 3;           % for use with dom = 1, the max peak difference to use both peaks
+gaus_fit     = 1;           % fit gaussian for Bragg integral halfwidth
+maxv         = 2;           % Max velocity (in m/s) defining the search region for Bragg peaks
+np           = 5;           % number of points on each side of Bragg peak used for Bragg peak estimation
+maxdf        = maxv/lbragg; % Maximum Doppler shift expected (used to search for Bragg peaks, given maxv)
+
+%% Parameters defining where to look for swell and second order spectra
+Highf   = 0.35;      % Maximum wave freq (Hz); defines the second order upper limit
+Lowf    = 0.025;     % Minimum wave freq (Hz); it defines the limit between 1st and 2nd order Doppler spectra
+minf    = 0.02;      % Min halfwidth of Bragg Peak
+
+%% Removes energy at around 0 Hz (+/-flim) 
+% This is a common issue in HF systems with high energy at 0 Hz (DC frequencies)
+% effects inner sidebands only
+flim = 0.046; % Hz (Default 0.046 Hz)
+
+%% Quality Control for 1st and 2nd order sidbands
+snr1    = 10;   % Threshold singal to noise ratio of 1st order Bragg peaks
+snr2    = 5;    % Threshold singal to noise ratio of 2nd order sidebnfs peaks
+dSigma  = 2;    % ratio of 1st order Bragg peaks and 2nd order peaks
+
+%% Inversion output resolution
+dth = 6;                % in Degrees
+df  = 0.005;            % in Hz
+th  = dth:dth:360;
+f   = Lowf:df:Highf;
+##### SOURCE END #####
+--></body></html>

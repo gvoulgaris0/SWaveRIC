@@ -1,0 +1,153 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>spreadparam</title><meta name="generator" content="MATLAB 9.10"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2021-07-26"><meta name="DC.source" content="spreadparam.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">spreadparam.m</a></li><li><a href="#2">INPUT</a></li><li><a href="#3">OUTPUT</a></li><li><a href="#4">Program</a></li></ul></div><h2 id="1">spreadparam.m</h2><pre>Wave spreading parameter calculation using:
+a) Hasselmann, D. E., M. Dunckel, and J. Ewing, 1980:
+   Directional wave spectra observed during JONSWAP 1973.
+b) Donelan, M. A., J. Hamilton, and W. H. Hui, 1985:
+   Directional spectra of wind-generated ocean waves.</pre><pre class="codeinput"><span class="keyword">function</span> [s,B] = spreadparam(fp,f1,U10)
+</pre><h2 id="2">INPUT</h2><pre>fp   = peak frequency
+f1   = wave frequency
+U10  = wind speed at 10m elevation (optional)</pre><h2 id="3">OUTPUT</h2><pre>s    = wave spreading parameter (Hasselmann et al.)
+B    = wave spreading parameter (Donelan et al.)</pre><h2 id="4">Program</h2><pre class="codeinput"><span class="comment">% Hasselmann, D. E., M. Dunckel, and J. Ewing, 1980:</span>
+<span class="comment">% Directional wave spectra observed during JONSWAP 1973.</span>
+<span class="keyword">if</span> isempty(U10)
+    s = nan;
+<span class="keyword">else</span>
+    Cp = 9.8./fp;
+    M = -2.33-1.45*((U10./Cp)-1.17);
+    <span class="keyword">if</span> f1&lt;1.05*fp
+        s = 6.97.*(f1./fp).^4.06;
+    <span class="keyword">elseif</span> f1&gt;=1.05*fp
+        s = 9.77.*(f1./fp).^M;
+    <span class="keyword">else</span>
+        s = nan;
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="comment">% Donelan, M. A., J. Hamilton, and W. H. Hui, 1985:</span>
+<span class="comment">% Directional spectra of wind-generated ocean waves.</span>
+<span class="keyword">if</span> f1/fp &gt; 0.56 &amp;&amp; f1/fp &lt;0.95
+    B = 2.61*((f1./fp).^1.3);
+<span class="keyword">elseif</span> f1/fp &gt; 0.95 &amp;&amp; f1/fp &lt;1.6
+    B = 2.28*((f1./fp).^-1.3);
+<span class="keyword">else</span>
+    B = 1.24;
+<span class="keyword">end</span>
+</pre><pre class="codeoutput error">Not enough input arguments.
+
+Error in spreadparam (line 21)
+if isempty(U10)
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2021a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% spreadparam.m
+%  Wave spreading parameter calculation using:
+%  a) Hasselmann, D. E., M. Dunckel, and J. Ewing, 1980:
+%     Directional wave spectra observed during JONSWAP 1973.
+%  b) Donelan, M. A., J. Hamilton, and W. H. Hui, 1985:
+%     Directional spectra of wind-generated ocean waves. 
+function [s,B] = spreadparam(fp,f1,U10)
+%% INPUT
+%  fp   = peak frequency
+%  f1   = wave frequency
+%  U10  = wind speed at 10m elevation (optional)
+
+%% OUTPUT
+%  s    = wave spreading parameter (Hasselmann et al.)
+%  B    = wave spreading parameter (Donelan et al.)
+
+%% Program
+
+% Hasselmann, D. E., M. Dunckel, and J. Ewing, 1980:
+% Directional wave spectra observed during JONSWAP 1973.
+if isempty(U10)
+    s = nan;
+else
+    Cp = 9.8./fp;
+    M = -2.33-1.45*((U10./Cp)-1.17);
+    if f1<1.05*fp
+        s = 6.97.*(f1./fp).^4.06;
+    elseif f1>=1.05*fp
+        s = 9.77.*(f1./fp).^M;
+    else
+        s = nan;
+    end
+end
+
+% Donelan, M. A., J. Hamilton, and W. H. Hui, 1985:
+% Directional spectra of wind-generated ocean waves. 
+if f1/fp > 0.56 && f1/fp <0.95
+    B = 2.61*((f1./fp).^1.3);
+elseif f1/fp > 0.95 && f1/fp <1.6
+    B = 2.28*((f1./fp).^-1.3);
+else
+    B = 1.24;
+end
+##### SOURCE END #####
+--></body></html>

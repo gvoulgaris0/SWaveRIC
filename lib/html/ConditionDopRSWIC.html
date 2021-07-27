@@ -1,0 +1,211 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>ConditionDopRSWIC.m</title><meta name="generator" content="MATLAB 9.10"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2021-07-26"><meta name="DC.source" content="ConditionDopRSWIC.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>ConditionDopRSWIC.m</h1><!--introduction--><pre>Script that:
+ 1. Loads all setup parameters from the ConfigRWIC.m file
+ 2. Identifies and removes noise level from Doppler spectrum
+ 3. Locates 1st order Bragg peaks
+ 4. Applies a Gaussian curve fitting to the Bragg peaks
+    (used for Bragg peak integration and 2nd order sideband low frequency limits)
+ 5. Integrates Bragg peaks using the Gaussian halfwidth from fit</pre><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Uses</a></li><li><a href="#2">Copyright</a></li><li><a href="#3">Load the configuration parameters</a></li><li><a href="#4">Remove noise near zero (DC) frequencies</a></li><li><a href="#5">Noise and approximate locations of Bragg peaks, PXY must be in dB</a></li><li><a href="#6">Convert from dB to linear units</a></li><li><a href="#7">Remove noise and set negative values (if any) to zero</a></li><li><a href="#8">2nd estimate of Bragg peak locations (in Hz) from de-noised Doppler spectra.</a></li><li><a href="#9">Fit a Gaussian Curve around each peak</a></li><li><a href="#10">---------------- identification of 1st order regions ------------------</a></li></ul></div><h2 id="1">Uses</h2><pre>  ConfigRSWIC.m, hfr_noise.m, Bragg_peak.m, Gauss_fit.m, PXYint.m</pre><h2 id="2">Copyright</h2><pre>2021 Zaid Alattabi, Douglas Cahl, George Voulgaris</pre><pre>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</pre><pre>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</pre><pre>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.</pre><h2 id="3">Load the configuration parameters</h2><pre class="codeinput">ConfigRSWIC;
+</pre><h2 id="4">Remove noise near zero (DC) frequencies</h2><pre class="codeinput">i = freq &gt;= -flim &amp; freq &lt;= flim;
+PXY(i) = min(PXY);
+</pre><h2 id="5">Noise and approximate locations of Bragg peaks, PXY must be in dB</h2><pre class="codeinput">[Noisedb,fp,fn] = hfr_noise(freq,PXY,fbragg,maxdf);
+</pre><h2 id="6">Convert from dB to linear units</h2><pre class="codeinput">PXY    = 10.^(0.1*PXY);
+Noise  = 10.^(0.1*Noisedb);
+PXY_or = PXY;                       <span class="comment">% Used for plotting purposes</span>
+</pre><h2 id="7">Remove noise and set negative values (if any) to zero</h2><pre class="codeinput">PXY        = PXY-Noise;
+PXY(PXY&lt;0) = (1.381e-23)*300; <span class="comment">% noise temperature at 300K (27C,80f), -203.8269 dBW/Hz</span>
+</pre><h2 id="8">2nd estimate of Bragg peak locations (in Hz) from de-noised Doppler spectra.</h2><pre class="codeinput">[fn,in] = Bragg_peak(freq,PXY,np,fn-maxdf/2,fn+maxdf/2 );  <span class="comment">% negative peak</span>
+[fp,ip] = Bragg_peak(freq,PXY,np,fp-maxdf/2,fp+maxdf/2 );  <span class="comment">% positive peak</span>
+</pre><h2 id="9">Fit a Gaussian Curve around each peak</h2><p>Subtraction can destroy swell peak if Gaussian is poorly fitted (removed 10/19/2018 DLC)</p><pre class="codeinput">sigmap = Gauss_fit(freq(ip),PXY(ip));
+sigman = Gauss_fit(freq(in),PXY(in));
+<span class="keyword">if</span> ~isreal(sigmap)
+    sigmap = df*(np-1); <span class="comment">% defaults back to np</span>
+<span class="keyword">end</span>
+<span class="keyword">if</span> ~isreal(sigman)
+    sigman = df*(np-1); <span class="comment">% defaults back to np</span>
+<span class="keyword">end</span>
+<span class="comment">%</span>
+</pre><h2 id="10">---------------- identification of 1st order regions ------------------</h2><p>It checks to make sure that the width of 1st order peak as estimated by the Gaussian fit is not too wide or too narrow (in case of a double peak being present).</p><p>Check for the negative 1st order Bragg peak</p><pre class="codeinput">hfn    = 0.5*2.355*sigman;       <span class="comment">% halfwidth of Bragg peak (from Gaussian, in Hz)</span>
+hfn    = hfn + df;               <span class="comment">% add an extra bin on the end to make sure we capture all points within the halfwidth</span>
+hfn    = min(hfn,Lowf);          <span class="comment">% in case of a poor Gaussian fit (too wide), hf  = Lowf</span>
+hfn    = max(hfn,minf/2);        <span class="comment">% in case too narrow</span>
+Lowfn  = min(2.355*sigman,Lowf); <span class="comment">% lowest swell freq.  - check to make sure its' not too wide</span>
+Lowfn  = max(Lowfn,minf);        <span class="comment">% check to make sure it's not too narrow</span>
+
+<span class="comment">% Check for the positive 1st order Bragg peak</span>
+hfp = 0.5*2.355*sigmap;
+hfp = hfp + df;
+hfp = min(hfp,Lowf);
+hfp = max(hfp,minf/2);
+Lowfp = min(2.355*sigmap,Lowf);
+Lowfp = max(Lowfp,minf);
+
+<span class="comment">% Estimate the Bragg peak integrals</span>
+[S1N,S1Npeak,S1n] = PXYint(freq,PXY,fn-hfn,fn+hfn);
+[S1P,S1Ppeak,S1p] = PXYint(freq,PXY,fp-hfp,fp+hfp);
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2021a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% ConditionDopRSWIC.m
+%
+%  Script that:       
+%   1. Loads all setup parameters from the ConfigRWIC.m file
+%   2. Identifies and removes noise level from Doppler spectrum 
+%   3. Locates 1st order Bragg peaks 
+%   4. Applies a Gaussian curve fitting to the Bragg peaks
+%      (used for Bragg peak integration and 2nd order sideband low frequency limits)
+%   5. Integrates Bragg peaks using the Gaussian halfwidth from fit
+%% Uses
+%    ConfigRSWIC.m, hfr_noise.m, Bragg_peak.m, Gauss_fit.m, PXYint.m
+%
+%% Copyright 
+%  2021 Zaid Alattabi, Douglas Cahl, George Voulgaris
+%
+%  This program is free software: you can redistribute it and/or modify
+%  it under the terms of the GNU General Public License as published by
+%  the Free Software Foundation, either version 3 of the License, or
+%  (at your option) any later version.
+%
+%  This program is distributed in the hope that it will be useful,
+%  but WITHOUT ANY WARRANTY; without even the implied warranty of
+%  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%  GNU General Public License for more details.
+%
+%  You should have received a copy of the GNU General Public License
+%  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+%
+%% Load the configuration parameters
+ConfigRSWIC;
+
+%% Remove noise near zero (DC) frequencies
+i = freq >= -flim & freq <= flim;
+PXY(i) = min(PXY);
+
+%% Noise and approximate locations of Bragg peaks, PXY must be in dB
+[Noisedb,fp,fn] = hfr_noise(freq,PXY,fbragg,maxdf);
+
+%% Convert from dB to linear units
+PXY    = 10.^(0.1*PXY);
+Noise  = 10.^(0.1*Noisedb);
+PXY_or = PXY;                       % Used for plotting purposes
+
+%% Remove noise and set negative values (if any) to zero
+PXY        = PXY-Noise;
+PXY(PXY<0) = (1.381e-23)*300; % noise temperature at 300K (27C,80f), -203.8269 dBW/Hz
+
+%% 2nd estimate of Bragg peak locations (in Hz) from de-noised Doppler spectra.
+[fn,in] = Bragg_peak(freq,PXY,np,fn-maxdf/2,fn+maxdf/2 );  % negative peak
+[fp,ip] = Bragg_peak(freq,PXY,np,fp-maxdf/2,fp+maxdf/2 );  % positive peak
+
+%% Fit a Gaussian Curve around each peak
+% Subtraction can destroy swell peak if Gaussian is poorly fitted (removed 10/19/2018 DLC)
+%
+sigmap = Gauss_fit(freq(ip),PXY(ip));
+sigman = Gauss_fit(freq(in),PXY(in));
+if ~isreal(sigmap)
+    sigmap = df*(np-1); % defaults back to np
+end
+if ~isreal(sigman)
+    sigman = df*(np-1); % defaults back to np
+end
+%
+%% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH identification of 1st order regions REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+% It checks to make sure that the width of 1st order peak as estimated by the
+% Gaussian fit is not too wide or too narrow (in case of a double peak being
+% present).
+%
+% Check for the negative 1st order Bragg peak
+hfn    = 0.5*2.355*sigman;       % halfwidth of Bragg peak (from Gaussian, in Hz)
+hfn    = hfn + df;               % add an extra bin on the end to make sure we capture all points within the halfwidth
+hfn    = min(hfn,Lowf);          % in case of a poor Gaussian fit (too wide), hf  = Lowf
+hfn    = max(hfn,minf/2);        % in case too narrow
+Lowfn  = min(2.355*sigman,Lowf); % lowest swell freq.  - check to make sure its' not too wide
+Lowfn  = max(Lowfn,minf);        % check to make sure it's not too narrow
+
+% Check for the positive 1st order Bragg peak
+hfp = 0.5*2.355*sigmap;
+hfp = hfp + df;
+hfp = min(hfp,Lowf);
+hfp = max(hfp,minf/2);
+Lowfp = min(2.355*sigmap,Lowf);
+Lowfp = max(Lowfp,minf);
+
+% Estimate the Bragg peak integrals
+[S1N,S1Npeak,S1n] = PXYint(freq,PXY,fn-hfn,fn+hfn);
+[S1P,S1Ppeak,S1p] = PXYint(freq,PXY,fp-hfp,fp+hfp);
+##### SOURCE END #####
+--></body></html>
