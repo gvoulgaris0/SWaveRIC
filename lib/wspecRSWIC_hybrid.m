@@ -64,7 +64,6 @@ RatioLim    = 0.3;
 % choose right method
 hybrid = 0;
 if Ratio > RatioLim && max(Sfs) > 0 % Swell dominated conditions for deep waters (use hybrid)
-    j = find(Sfs > Sfw,2,'last');
     [~,j] = min(abs(f-(fc))); % force wind inversion to zero below swell cutoff frequency
     j = j - 1;
     hybrid = 1; % use hybrid
