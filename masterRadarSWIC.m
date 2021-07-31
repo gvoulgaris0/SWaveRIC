@@ -30,7 +30,6 @@
 fc          = 0.115;    % frequency (in Hz) separating swell from wind waves region, it is calculated based on wind speed 
 wind_fc     = 1;        % alternatively use wind speed to calculate the appropriate frequency cutoff 
 max_fc      = 0.12;     % maximum frequency cutoff (used when wind speed is low which will give a very high frequency)
-depth       = 53.8;     % water depth of inversion location (meters) 
 jswaproll   = 1;        % =1 apply JONSWAP roll off below fc; =0 forces inversion to zero below fc
 switc1      = 1;        % switch for avoid Bragg peak (switc1=1), or include all data below fc (switc1=999)
 %% Inversion Model Calibration coefficients for wind-wave inversion (see Alattabi et al., 2021)
@@ -55,6 +54,7 @@ beam2 = 178.2; % Per beam angle for PXY2
 %  load(spec_site1);         % load Doppler spectrum file from radar (freq,PXY1)
 %  load(spec_site2);         % load Doppler spectrum file from radar (freq,PXY2)
 %  load(wspd)                % load wind speed (optional)
+%  load(depth)               % load water depth at time of HF radar acquisition (may change with tides)
 %% Inversion Model Output:
 %  Sf        - 1D- Wave energy spectral density (S(f))
 %  Df        -  Wave directional as fucntion of wave frequncy (D(f))
