@@ -1,24 +1,23 @@
 %% wn2ndRSWIC.m
-%  This function returns the 2nd order Doppler spectrum used for the wave inversion.
-%  This is normalized by the 1st order energy (R)
-%  and is also weighted by Barrick's weighting function (Rw)
-%  The corresponding wave frequencies are given as fw
+%  This function returns the 2nd order Doppler spectrum used for HF radar wave inversion.
+%  The spectrun is normalized by the 1st order energy (R)and also weighted 
+%  using Barrick's weighting function (Rw). The corresponding ocean wave frequencies are given as fw
 %%
 function [R,Rw,fw,D,Dw,debug] = wn2ndRSWIC(freq,PXY,switc1)
-%% Input
+%% Inputs
 %  freq:        Array of Doppler frequencies for the Doppler spectrum (in Hz)
 %  PXY(1:freq): Array of Spectral Energy (in dB), do not send arrays of NaN
 %  switc1:      option passed to PXYsideband.m 
 %
-%% Output
-%  fw:        Ocean wave frequencies (in Hz)
+%% Outputs
+%  fw:       Ocean wave frequencies (in Hz)
 %  R:        (no units) normalized (no weighted) 2nd order sideband
 %  Rw:       (no units) weighted (by Barrick's weighting function)and normalized 2nd order sideband
 %  D:        (no units) Ratio of normalized 2nd order sidebands around a peak [(R_right_of_peak)/(R_left_of_peak)]
 %  Dw:       (no units) Ratio of normalized & weighted 2nd order sideband around a peak [(Rw_right_of_peak)/(Rw_left_of_peak)]
 %  debug:    Structure variable to be used for debugging purposes
 %
-%% Debug data
+%% Debugging parameteres
 %  Extra data to be used for debugging purposes for each sideband.
 %  debug.fw1-n  the ocean wave frequency from the Doppler spectra for sideband n
 %  debug.E1-n   Doppler energy for sideband n
@@ -34,7 +33,7 @@ function [R,Rw,fw,D,Dw,debug] = wn2ndRSWIC(freq,PXY,switc1)
 %  debug.sigma1 width of Bragg peak
 %  debug.Noise  Noise level
 %  debug.S11    ratio of std of Bragg peak region (to get wind direction/local wind wave direction)
-%  debug.braggpeaksSNR Bragg peak SNR for positive and negative side peaks
+%  debug.braggpeaksSNR  Bragg peak SNR for positive and negative side peaks
 %
 %% Uses
 %  ConditionDopRSWIC.m, PXYsideband.m
@@ -82,10 +81,10 @@ debug.fi1 =fi1;      debug.fi2 =fi2;      debug.fi3 =fi3;      debug.fi4 =fi4;
 debug.Noise = Noise; debug.S11 = [S1n S1p];
 debug.braggpeaksSNR = [S1Npeak S1Ppeak]./Noise;
 debug.PXY_or = PXY_or; debug.PXY = PXY;
-debug.fn = fn; debug.fp = fp;
+debug.fn = fn;         debug.fp = fp;
 
-%% blanks energy at around 0 Hz (+/-flim)
-E2i = E2;
+% blanks energy at around 0 Hz (+/-flim)
+E2i  = E2;
 fw2i = fw2;
 E2i(fi2 > -flim) = 0;    % negative peak inner sideband limit
 E2i  = interp1(fw2i,E2i,fw1,'linear');
@@ -95,21 +94,13 @@ E3i(fi3 < flim) = 0;
 fw3i = fw3;
 E3i  = interp1(fw3i,E3i ,fw4,'linear');
 
+debug.SNR2_n   = 10*log10(max(max([E1,E2i]))./Noise);
+debug.SNR1_n   = 10*log10(max(S1Npeak)./Noise);
+debug.dSigma_n = debug.SNR1_n - debug.SNR2_n;
 
-debug.SNR2_n   = max(max([E1,E2i]))./Noise;
-debug.SNR1_n   = max(S1Npeak)./Noise;
-debug.dSigma_n = debug.SNR1_n./debug.SNR2_n;
-debug.SNR2_n = 10*log10(debug.SNR2_n);
-debug.SNR1_n = 10*log10(debug.SNR1_n);
-debug.dSigma_n = 10*log10(debug.dSigma_n);
-
-
-debug.SNR2_p   = max(max([E3i,E4]))./Noise;
-debug.SNR1_p   = max(S1Ppeak)./Noise;
-debug.dSigma_p = debug.SNR1_p./debug.SNR2_p;
-debug.SNR2_p = 10*log10(debug.SNR2_p);
-debug.SNR1_p = 10*log10(debug.SNR1_p);
-debug.dSigma_p = 10*log10(debug.dSigma_p);
+debug.SNR2_p   = 10*log10(max(max([E3i,E4]))./Noise);
+debug.SNR1_p   = 10*log10(max(S1Ppeak)./Noise);
+debug.dSigma_p = debug.SNR1_p - debug.SNR2_p;
 
 %%
 % use all 4 sidebands
@@ -132,8 +123,7 @@ if debug.SNR1_n > snr1 && debug.SNR2_n > snr2 && debug.dSigma_n > dSigma && debu
     debug.dSigma = max([debug.dSigma_n,debug.dSigma_p]);
     
     debug.sigma1 = nanmean([sigmap;sigman]);
-    
-    
+        
     % if only sidebands 1 and 2 have required snr
 elseif  debug.SNR1_n > snr1 && debug.SNR2_n > snr2 && debug.dSigma_n > dSigma
     % do not cross flim (default 0 Hz) for inner sideband
@@ -153,7 +143,6 @@ elseif  debug.SNR1_n > snr1 && debug.SNR2_n > snr2 && debug.dSigma_n > dSigma
     debug.SNR1   = debug.SNR1_n;
     debug.dSigma = debug.dSigma_n;
     debug.sigma1 = sigman;
-    
     
     % if only sidebands 3 and 4 have required snr
 elseif  debug.SNR1_p > snr1 && debug.SNR2_p > snr2 && debug.dSigma_p > dSigma
@@ -219,6 +208,5 @@ Dw   = [Dnan ; Dw];
 
 % smooth spectrum
 Dw = movmean(Dw,3,1,'omitnan');
-
 
 end % end of main function

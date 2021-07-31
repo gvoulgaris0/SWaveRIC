@@ -4,8 +4,8 @@
 function [G]=DirFun(s,Thm,th,B,model)
 %% INPUT
 %  s     = Directional spreading factor      
-%  Thm   = Mean Direction of Waves (in Radians)
-%  th    = Radar Angle (in Radians)/Ellipse Normal
+%  Thm   = Mean Direction of Waves (in degrees)
+%  th    = Radar Angle (in degrees)/Ellipse Normal
 %  model = model used for wave spreading 
 %          (=1) Hasselmann et al., 1980 
 %          (=2)Donelan at al., 1985
@@ -31,7 +31,7 @@ function [G]=DirFun(s,Thm,th,B,model)
 %
 %% Program
 if model == 1 % Hasselmann et al., 1980
-    FSA     = abs(cos(0.5*(th-Thm)).^(2*s));
+    FSA     = abs(cosd(0.5*(th-Thm)).^(2*s));
     FSB     = (gamma(s+1)).^2./gamma(2*s+1);
     G       = ((2.^(2*s-1))/pi).*FSA.*FSB;
 elseif model == 2 % Donelan at al., 1985
