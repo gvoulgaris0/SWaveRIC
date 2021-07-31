@@ -35,7 +35,7 @@ if model == 1 % Hasselmann et al., 1980
     FSB     = (gamma(s+1)).^2./gamma(2*s+1);
     G       = ((2.^(2*s-1))/pi).*FSA.*FSB;
 elseif model == 2 % Donelan at al., 1985
-    FSA     = sech(B.*(th-Thm)).^2;
+    FSA     = sech(B.*(th-Thm)*pi/180).^2;
     FSB     = 0.5*B;
     G       = FSB.*FSA;
 end
