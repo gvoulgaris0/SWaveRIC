@@ -27,7 +27,7 @@
 %
 %  The inversion is very sensitive to the swell cutoff frequency fc. 
 %  fc = 0.12 better for G, fc = 0.11 better for F
-fc          = 0.115;    % frequency (in Hz) separating swell from wind waves region, it is calculated based on wind speed 
+fc          = 0.115;    % frequency (in Hz) separating swell from wind waves region
 wind_fc     = 1;        % alternatively use wind speed to calculate the appropriate frequency cutoff 
 max_fc      = 0.12;     % maximum frequency cutoff (used when wind speed is low which will give a very high frequency)
 jswaproll   = 1;        % =1 apply JONSWAP roll off below fc; =0 forces inversion to zero below fc
