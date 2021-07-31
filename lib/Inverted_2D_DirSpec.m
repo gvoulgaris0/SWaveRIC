@@ -21,7 +21,7 @@ function [Sfth] = Inverted_2D_DirSpec(fp,th,Df,Sf,f,wspd,model)
 Sfth = zeros(length(f),length(th));
 for i = 1:length(f)
     [s,B] = spreadparam(fp,f(i),wspd);
-    [G]=DirFun(s,Df(i)*pi/180,th*pi/180,B,model);
+    [G]=DirFun(s,Df(i),th,B,model);
     G = G*pi/180;
     Sfth(i,:) = Sf(i).*G;
 end
