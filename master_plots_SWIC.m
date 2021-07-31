@@ -20,7 +20,7 @@
 %  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 %
 %% Use data from PEN and PER beams pointed at bouy site (see Alattabui et al., 2021)
-addpath('libs')
+addpath('lib')
 basedir = 'data/';
 
 fdir    = dir(basedir);
