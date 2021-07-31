@@ -28,6 +28,8 @@
 %  The inversion is very sensitive to the swell cutoff frequency fc. 
 %  fc = 0.12 better for G, fc = 0.11 better for F
 fc     = 0.115;  % frequency (in Hz) separating swell from wind waves region, it is calculated based on wind speed 
+wind_fc = 1;     % alternatively use wind speed to calculate the appropriate frequency cutoff 
+max_fc  = 0.12;  % maximum frequency cutoff (used when wind speed is low which will give a very high frequency)
 depth  = 53.8;   % water depth of inversion location (meters) 
 jswaproll = 1;   % =1 apply JONSWAP roll off below fc; =0 forces inversion to zero below fc
 switc1 = 1;      % switch for avoid Bragg peak (switc1=1), or include all data below fc (switc1=999)
@@ -69,7 +71,13 @@ beam2 = 178.2; % Per beam angle for PXY2
 ConfigRSWIC;
 if ~exist('wspd','var') % check for wind speed data
     wspd = [];
+elseif wind_fc == 1 % use wind speed for frequency cutoff
+    fc = (g./(2*pi))*(1./(1.5*wspd); 
+    if fc > max_fc
+        fc = max_fc;
+    end
 end
+
 %% Swell Wave Inversion - RadarSWIC (see Alattabi et al., 2021)
 [Df,Sf,Sfth,Fs,Hsw,Ths,Ths_err] = RadarSWIC(freq,PXY1,PXY2,f,fr,aw,sigma,fc,jswaproll,beam1,beam2,depth,th,wspd,switc1);
 % disp(Ths_err) % estimate of uncertainty in swell propagation direction
