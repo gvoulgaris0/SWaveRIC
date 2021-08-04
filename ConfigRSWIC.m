@@ -55,4 +55,5 @@ dSigma  = 2;    % ratio of 1st order Bragg and 2nd order peaks
 dth = 6;                % directional resolution in Degrees
 df  = 0.005;            % frequency resolution in Hz
 th  = dth:dth:360;      % direction array (degs)
-f   = Lowf:df:Highf;    % frequency array (Hz)
+%f   = Lowf:df:Highf;    % frequency array (Hz)
+f   = flim:df:Highf;    % frequency array (Hz) % flim is used so the inverted spectral frequency matches the insitu 
