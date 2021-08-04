@@ -37,12 +37,15 @@ The files are located in three directories:
 - SWaveRIC/data  
   It contains the data files used by master_testing.m for running examples from the Alattabi et al (2019) paper; Events A to H. It recreates Figure 11 in the paper.
 
-List of Files  
+# List of Files  
 
 - Main Functions:  
   ConfigRSWIC.m
+  
   DemoRadarSWIC.m
+  
   masterRadarSWIC.m
+  
   RadarSWIC.m
 
 - Library Functions (../lib):
