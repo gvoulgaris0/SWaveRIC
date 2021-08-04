@@ -44,20 +44,20 @@ function [Df,Sf,Sfth,Fs,Hsw,Ths,Ths_err] = RadarSWIC(freq,PXY1,PXY2,f,fr,aw,sigm
 %  wspd      - wind speed (at 10m elevation)                      (in m/s)
 %  switc1    - switch used for avoid Bragg peak (switc1=1), or include all data below fc (switc1=999)
 %% Outputs
-%  Df        - Wave direction as function of wave frequency (D(f), in deg)
+%  Df        - Wave directional spectrum (D(f))
 %  Sf        - 1D- total wave energy spectral density (S(f), m2/Hz)
 %  Sfth      - 2D- total directional wave spectrum (S(f,theta), m2/Hz/deg)
 %  Fs        - Swell wave frequency
-%  Hsw       - Swell root mean square wave height (Swell Hrms, in m)
-%  Ths       - Swell Wave direction (in deg)
-%  Ths_err   - Estimate of uncertainty in swell direction (in deg)
+%  Hsw       - Swell root mean square wave height (Swell Hrms)
+%  Ths       - Swell Wave direction
+%  Ths_err   - Estimate of uncertainty in swell direction
 %% Uses
 %  wn2ndRSWIC.m,          specWindRSWIC.m,     
 %  dopLipaS.m,            swell_singular.m,
 %  specSwellRSWIC.m,      wspecRSWIC_hybrid.m, 
 %  Inverted_2D_DirSpec.m, waveparams3.m
 %% Copyright 
-%  2021 Zaid Alattabi, Douglas Cahl, George Voulgaris
+%  2021 Zaid Al-attabi, Douglas Cahl, George Voulgaris
 %
 %  This program is free software: you can redistribute it and/or modify
 %  it under the terms of the GNU General Public License as published by

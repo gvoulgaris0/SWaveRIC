@@ -1,0 +1,150 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Gauss_fit</title><meta name="generator" content="MATLAB 9.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2021-08-03"><meta name="DC.source" content="Gauss_fit.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">Gauss_fit.m</a></li><li><a href="#3">Inputs</a></li><li><a href="#4">Outputs</a></li><li><a href="#5">Copyright 2019 Zaid Al-attabi, Douglas Cahl, George Voulgaris</a></li><li><a href="#6">Main Function</a></li></ul></div><h2 id="1">Gauss_fit.m</h2><pre>Fits a Gausian curve to data</pre><pre class="codeinput"><span class="keyword">function</span> [sigma,mu,A]=Gauss_fit(x,y)
+</pre><pre class="codeinput"><span class="comment">% [sigma,mu,A]=Gauss_fit(x,y)</span>
+<span class="comment">%</span>
+<span class="comment">%  Function that fits a Gaussian (normal distribution) curve on data x, y:</span>
+<span class="comment">%  Y = (A * exp( -(X-mu).^2 ./ (2*sigma^2) ));</span>
+<span class="comment">%  It is used to simulate the 1st Bragg peak and find its width.</span>
+<span class="comment">%</span>
+</pre><h2 id="3">Inputs</h2><pre>x     - X values (i.e., frequency, f)
+y     - Y values (linear units, i.e., Spectral energy)</pre><h2 id="4">Outputs</h2><pre>sigma - standard deviation of normal distribution indicating the
+        broadening of the distribution
+mu    - Mean value indicating mean(x) where the peak is located
+A     - Normalizing coefficient.</pre><h2 id="5">Copyright 2019 Zaid Al-attabi, Douglas Cahl, George Voulgaris</h2><p>This file is part of RadarWIC.</p><p>RadarWIC is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p><p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p><p>You should have received a copy of the GNU General Public License along with this program.  If not, see <a href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>.</p><h2 id="6">Main Function</h2><p>Condition data</p><pre class="codeinput">y = log(y(:));   <span class="comment">% Convert from linear to log units</span>
+x = x(:) ;
+
+<span class="comment">% Fit parabola</span>
+p  = polyfit(x,y,2);
+A2 = p(1);
+A1 = p(2);
+A0 = p(3);
+
+<span class="comment">% Estimate Gaussian parameters from parabolic fit</span>
+sigma   = sqrt(-1/(2*A2));
+mu      = A1*sigma^2;
+A       = exp(A0+mu^2/(2*sigma^2));
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Gauss_fit.m
+%  Fits a Gausian curve to data
+%
+function [sigma,mu,A]=Gauss_fit(x,y)
+% [sigma,mu,A]=Gauss_fit(x,y)
+%
+%  Function that fits a Gaussian (normal distribution) curve on data x, y:
+%  Y = (A * exp( -(X-mu).^2 ./ (2*sigma^2) ));
+%  It is used to simulate the 1st Bragg peak and find its width.
+%
+%% Inputs
+%  x     - X values (i.e., frequency, f)
+%  y     - Y values (linear units, i.e., Spectral energy)
+%
+%% Outputs
+%  sigma - standard deviation of normal distribution indicating the
+%          broadening of the distribution
+%  mu    - Mean value indicating mean(x) where the peak is located
+%  A     - Normalizing coefficient.
+%
+%% Copyright 2019 Zaid Al-attabi, Douglas Cahl, George Voulgaris
+%
+% This file is part of RadarWIC.
+%
+% RadarWIC is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+% 
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+% 
+% You should have received a copy of the GNU General Public License
+% along with this program.  If not, see <https://www.gnu.org/licenses/>.
+%
+%% Main Function
+% Condition data
+y = log(y(:));   % Convert from linear to log units
+x = x(:) ;
+
+% Fit parabola
+p  = polyfit(x,y,2);
+A2 = p(1);
+A1 = p(2);
+A0 = p(3);
+
+% Estimate Gaussian parameters from parabolic fit
+sigma   = sqrt(-1/(2*A2)); 
+mu      = A1*sigma^2;         
+A       = exp(A0+mu^2/(2*sigma^2));
+end
+##### SOURCE END #####
+--></body></html>

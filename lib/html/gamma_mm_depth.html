@@ -1,0 +1,265 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>gamma_mm_depth</title><meta name="generator" content="MATLAB 9.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2021-08-03"><meta name="DC.source" content="gamma_mm_depth.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">gamma_mm_depth</a></li><li><a href="#3">Inputs</a></li><li><a href="#4">Outputs</a></li><li><a href="#5">References</a></li><li><a href="#6">Main</a></li></ul></div><h2 id="1">gamma_mm_depth</h2><pre class="codeinput"><span class="keyword">function</span> [G,C,f] = gamma_mm_depth(m1,m2,k0,kso,ths,d)
+</pre><pre class="codeinput"><span class="comment">% [G,C,f] = gamma_mm(m1,m2,k0,k1,th1)</span>
+<span class="comment">%</span>
+<span class="comment">% this function calculates the coupling coefficient (G), residual term (C)</span>
+<span class="comment">% and frequency positions (f) of four swell peaks (m1 = +/-1, m2 = +/- 1)</span>
+<span class="comment">% for a radar wavenumber (k0) and a swell wavenumber (k1) with an angle</span>
+<span class="comment">% between the radar beam direction and the wave propogation direction given</span>
+<span class="comment">% by th1 (in degrees).</span>
+<span class="comment">%</span>
+<span class="comment">% m1 denotes the positive and negative Bragg peaks</span>
+<span class="comment">% m2 denotes left or right of the Bragg peak (m1)</span>
+<span class="comment">% The peaks are numbered sequentially 1 to 4 from lowest freq to highest,</span>
+<span class="comment">% so 1 is negative frequency range, outside swell peak, and 4 is positive outside swell peak</span>
+<span class="comment">% 1 = m1(m) = -1, m2(m') = -1</span>
+<span class="comment">% 2 = m1(m) = -1, m2(m') = +1</span>
+<span class="comment">% 3 = m1(m) = +1, m2(m') = -1</span>
+<span class="comment">% 4 = m1(m) = +1, m2(m') = +1</span>
+<span class="comment">%</span>
+<span class="comment">% f, G are given in Lipa and Barrick 1980</span>
+<span class="comment">% C is approximated by a PM spectrum given in Wang et al. 2016.</span>
+<span class="comment">%</span>
+</pre><h2 id="3">Inputs</h2><pre>m1 = -1 for negative Bragg peak, +1 for positive Bragg peak
+m2 = -1 for left of Bragg peak, +1 for right of Bragg peak
+k0 = radar wavenumber
+k1 = swell wavenumber
+th1 = angle between swell propogation direction (k1) and radar beam direction (k0)
+d   = depth</pre><h2 id="4">Outputs</h2><pre>G = |gamma|_j^2 where gamma = gamma_EM + gammma_hydro (deep water
+approximation, see Appendix in Wang et al. 2016 or Lipa and Barrick 1980
+C = C_j calculated using the approximation in Wang,
+f = f_j the theoretical swell peak frequency</pre><h2 id="5">References</h2><pre>Lipa BJ, Barrick DE (1980) Methods for the extraction of long-period
+ocean wave parameters from narrow beam HF radar sea echo. Radio Sci 15(4):843&#8211;853</pre><pre>Lipa BJ, Barrick DE (1986) Extraction of sea state from HF radar sea
+echo: mathematical theory and modeling. Radio Sci 21(1):81&#8211;100.</pre><pre>Wang, Weili, Philippe Forget, and Changlong Guan. "Inversion and
+assessment of swell waveheights from HF radar spectra in the Iroise Sea."
+Ocean Dynamics 66.4 (2016): 527-538.</pre><h2 id="6">Main</h2><p>constants</p><pre class="codeinput">delta = 0.011 - 0.012*1i; <span class="comment">% impedance</span>
+g = 9.81;
+
+<span class="comment">%ks=wave_dispersion_h(kso,d);</span>
+ks = kso;
+<span class="comment">%k0=wave_dispersion_h(k0,d);</span>
+
+k1x = ks*cosd(ths);
+k1y = ks*sind(ths);
+
+k0y = 0; <span class="comment">% k0*sind(th0);</span>
+
+<span class="comment">% calculate k2, wind wave that scatters with the k1, swell wave radar k</span>
+k0x = k0; <span class="comment">%k0*cosd(th0);</span>
+<span class="keyword">if</span> m1 &lt; 0
+    k0x = - k0x;
+<span class="keyword">end</span>
+k2x = -2*k0x - k1x;
+k2y = -2*k0y - k1y;
+k2 = sqrt(k2x^2+k2y^2);
+
+kb = 2*k0;
+<span class="comment">%wb = sqrt(g*kb);</span>
+<span class="comment">%ws = sqrt(g*k1);</span>
+wb = sqrt(kb*g*tanh(kb*d));
+ws = sqrt(ks*g*tanh(ks*d));
+<span class="comment">% Lipa</span>
+w = m1*ws+m2*(wb^4+2*m1*ws^2*wb^2*cosd(ths)+ws^4)^(1/4);
+f = w/2/pi;
+
+k1k0 = k1x*k0x+k1y*k0y;
+k2k0 = k2x*k0x+k2y*k0y;
+k1k2 = k1x*k2x+k1y*k2y;
+
+g_em = (1/2)*((k1k0*k2k0)/(k0^2) - 2*k1k2) / ( sqrt(k1k2) - k0*delta);
+
+k1 = sqrt(k1x^2+k1y^2);
+k11 = k1*tanh(k1*d);
+k22 = k2*tanh(k2*d);
+
+F1 = k11+k22;
+F2 = (((k11*k22)-k1k2)./(m1*m2*sqrt(k11*k22)));
+F3 = (w^2+wb^2)./(w^2-wb^2);
+F4 = w*(((m1*sqrt(g*k1))^3)*(csch(k1*d)^2));
+F5 = w*(((m2*sqrt(g*k2))^3)*(csch(k2*d)^2));
+F6 = g*(w^2-wb^2);
+
+g_h = (-1i*0.5).*(F1-(F2*F3)+((F4+F5)/F6));
+
+gamma = g_em + g_h;
+G = abs(gamma)^2;
+
+<span class="comment">% Wang/Forget approximations</span>
+C = (1+(k1/k0)^2/4 + m1*k1*cosd(ths)/k0)^-2; <span class="comment">% Wang approx using P-M spec, Lipa assume C_j = 1</span>
+</pre><pre class="codeinput"><span class="keyword">end</span> <span class="comment">% End of main program</span>
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% gamma_mm_depth
+function [G,C,f] = gamma_mm_depth(m1,m2,k0,kso,ths,d) 
+% [G,C,f] = gamma_mm(m1,m2,k0,k1,th1) 
+%  
+% this function calculates the coupling coefficient (G), residual term (C)
+% and frequency positions (f) of four swell peaks (m1 = +/-1, m2 = +/- 1)
+% for a radar wavenumber (k0) and a swell wavenumber (k1) with an angle
+% between the radar beam direction and the wave propogation direction given
+% by th1 (in degrees). 
+%
+% m1 denotes the positive and negative Bragg peaks
+% m2 denotes left or right of the Bragg peak (m1)
+% The peaks are numbered sequentially 1 to 4 from lowest freq to highest, 
+% so 1 is negative frequency range, outside swell peak, and 4 is positive outside swell peak
+% 1 = m1(m) = -1, m2(m') = -1
+% 2 = m1(m) = -1, m2(m') = +1
+% 3 = m1(m) = +1, m2(m') = -1
+% 4 = m1(m) = +1, m2(m') = +1
+%
+% f, G are given in Lipa and Barrick 1980
+% C is approximated by a PM spectrum given in Wang et al. 2016. 
+%
+%% Inputs
+%  m1 = -1 for negative Bragg peak, +1 for positive Bragg peak
+%  m2 = -1 for left of Bragg peak, +1 for right of Bragg peak
+%  k0 = radar wavenumber 
+%  k1 = swell wavenumber 
+%  th1 = angle between swell propogation direction (k1) and radar beam direction (k0)
+%  d   = depth 
+%
+%% Outputs
+%  G = |gamma|_j^2 where gamma = gamma_EM + gammma_hydro (deep water
+%  approximation, see Appendix in Wang et al. 2016 or Lipa and Barrick 1980
+%  C = C_j calculated using the approximation in Wang, 
+%  f = f_j the theoretical swell peak frequency 
+%
+%% References
+%
+%  Lipa BJ, Barrick DE (1980) Methods for the extraction of long-period
+%  ocean wave parameters from narrow beam HF radar sea echo. Radio Sci 15(4):843–853
+%  
+%  Lipa BJ, Barrick DE (1986) Extraction of sea state from HF radar sea
+%  echo: mathematical theory and modeling. Radio Sci 21(1):81–100.
+%
+%  Wang, Weili, Philippe Forget, and Changlong Guan. "Inversion and 
+%  assessment of swell waveheights from HF radar spectra in the Iroise Sea."
+%  Ocean Dynamics 66.4 (2016): 527-538.
+%
+%% Main
+% constants
+delta = 0.011 - 0.012*1i; % impedance
+g = 9.81;
+
+%ks=wave_dispersion_h(kso,d);
+ks = kso;
+%k0=wave_dispersion_h(k0,d);
+
+k1x = ks*cosd(ths);
+k1y = ks*sind(ths);
+
+k0y = 0; % k0*sind(th0);
+
+% calculate k2, wind wave that scatters with the k1, swell wave radar k
+k0x = k0; %k0*cosd(th0);
+if m1 < 0
+    k0x = - k0x;
+end
+k2x = -2*k0x - k1x;
+k2y = -2*k0y - k1y;
+k2 = sqrt(k2x^2+k2y^2);
+
+kb = 2*k0;
+%wb = sqrt(g*kb);
+%ws = sqrt(g*k1);
+wb = sqrt(kb*g*tanh(kb*d));
+ws = sqrt(ks*g*tanh(ks*d));
+% Lipa
+w = m1*ws+m2*(wb^4+2*m1*ws^2*wb^2*cosd(ths)+ws^4)^(1/4);
+f = w/2/pi;
+
+k1k0 = k1x*k0x+k1y*k0y;
+k2k0 = k2x*k0x+k2y*k0y;
+k1k2 = k1x*k2x+k1y*k2y;
+
+g_em = (1/2)*((k1k0*k2k0)/(k0^2) - 2*k1k2) / ( sqrt(k1k2) - k0*delta);
+
+k1 = sqrt(k1x^2+k1y^2);
+k11 = k1*tanh(k1*d);
+k22 = k2*tanh(k2*d);
+
+F1 = k11+k22;
+F2 = (((k11*k22)-k1k2)./(m1*m2*sqrt(k11*k22)));        
+F3 = (w^2+wb^2)./(w^2-wb^2);
+F4 = w*(((m1*sqrt(g*k1))^3)*(csch(k1*d)^2));
+F5 = w*(((m2*sqrt(g*k2))^3)*(csch(k2*d)^2));
+F6 = g*(w^2-wb^2);
+
+g_h = (-1i*0.5).*(F1-(F2*F3)+((F4+F5)/F6));
+
+gamma = g_em + g_h;
+G = abs(gamma)^2;
+
+% Wang/Forget approximations
+C = (1+(k1/k0)^2/4 + m1*k1*cosd(ths)/k0)^-2; % Wang approx using P-M spec, Lipa assume C_j = 1
+end % End of main program
+##### SOURCE END #####
+--></body></html>

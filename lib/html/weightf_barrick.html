@@ -1,0 +1,242 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>weightf_barrick</title><meta name="generator" content="MATLAB 9.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2021-08-03"><meta name="DC.source" content="weightf_barrick.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">weightf_barrick.m</a></li><li><a href="#2">Call:</a></li><li><a href="#3">Inputs</a></li><li><a href="#4">Outputs</a></li><li><a href="#5">Copyright</a></li></ul></div><h2 id="1">weightf_barrick.m</h2><pre>Estimating the weighting function of Barrick 1977</pre><pre class="codeinput"><span class="keyword">function</span> w = weightf_barrick(fb,fw,side,cut1)
+</pre><h2 id="2">Call:</h2><pre>w = weightf_barrick(fb,fw,side,[cut1])</pre><pre>This function calculates the Barrick's (1977) weighting function
+to eliminate the contribution of wave-wave interactions in the second
+order peaks of Doppler spectra.</pre><pre>The Bragg frequency of the radar (in Hz) is given by fb. fw is the
+frequencies (in Hz) of the ocean wave spectrum it is internally converted
+to Doppler frequency fd=fw+fb or fd=fw-fb and then to normalized Doppler
+frequency v = fd/fb</pre><pre>Digitized (DLC 2018) from Figure 3 in Barrick, D.E., 1977. Extraction of
+wave parameters from measured HF radar sea-echo Doppler spectra. Radio
+Sci. 12, 415&#8211;424. https://doi.org/10.1029/RS012i003p00415</pre><h2 id="3">Inputs</h2><pre>fb   - Bragg Frequency (in Hz) of the HF radar
+fw   - Ocean wave frequencies (in Hz)
+side - -1 for inner side-band (closer to 0 Hz side of the Bragg peak)
+       +1 for outer side-band (larger absolute freq. values than fbragg)
+cut1 - [optional, default value 0]
+        If =1, then it cuts off negative normalized freqs (after crossing 0 Hz)</pre><h2 id="4">Outputs</h2><pre>w   - weighting function values</pre><h2 id="5">Copyright</h2><pre>2021 Zaid Al-attabi, Douglas Cahl, George Voulgaris</pre><pre>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</pre><pre>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</pre><pre>You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.</pre><pre class="codeinput"><span class="keyword">if</span> nargin &lt; 4
+    cut1 = 0;
+<span class="keyword">end</span>
+
+<span class="comment">% points from figure digitization in x = f_dopper/f_bragg and y = w</span>
+<span class="comment">% 3 curves in log10 of w</span>
+x1 = [0.0821 0.1096 0.1806 0.2888 0.5438 0.6584 0.9199 1.0491 1.1895 1.2993 1.4139];
+y1 = [968.6990 430.6176 94.4144 22.7306 2.1925 1.6220 2.3580 2.6163 2.3580 2.9029 5.1953];
+x2 = [1.4187 1.4752 1.5156 1.5689 1.5979 1.6173 1.6706];
+y2 = [5.1953 2.5097 1.9154 3.5001 7.3211 12.4393 108.0739];
+x3 = [1.6706 1.6851 1.7061 1.7400 1.8158 1.9143 1.9740 2.0886 2.2194 2.3889];
+y3 = [105.8505 37.0486 10.3167 6.5302 5.3599 5.8246 6.7370 8.6458 11.9327 17.8973];
+pp4 = polyfit(x3(end-1:end),log10(y3(end-1:end)),1); <span class="comment">% linear in log10 fit for normalized freq &gt; 2.4</span>
+
+<span class="comment">% Convert ocean wave frequencies to normalized doppler frequency (fD/fB)</span>
+fw = fw(:);     <span class="comment">% ocean wave frequency range</span>
+<span class="keyword">if</span> side&gt;0       <span class="comment">% right side of Bragg peak</span>
+    fD = fw+fb; <span class="comment">% radar Doppler frequencies</span>
+<span class="keyword">else</span>            <span class="comment">% left side of Bragg peak</span>
+    fD=fb-fw;   <span class="comment">% radar Doppler frequencies</span>
+<span class="keyword">end</span>
+f = fD/fb;      <span class="comment">% normalized radar Doppler freq</span>
+
+w=nan(size(f)); <span class="comment">% Pre-allocate array</span>
+
+<span class="comment">% extrapolate each continuous curve, in log10 with cubic spline interp</span>
+i1 = find(abs(f)&gt;=0 &amp; abs(f) &lt;=sqrt(2));
+<span class="keyword">if</span> ~isempty(i1)
+    w(i1) = 10.^(spline(x1,log10(y1),abs(f(i1)))); <span class="comment">% spline in log10 space</span>
+<span class="keyword">end</span>
+
+i2 = find(abs(f) &gt;sqrt(2) &amp; abs(f)&lt;=2^(3/4));
+<span class="keyword">if</span> ~isempty(i2)
+    w(i2) = 10.^(spline(x2,log10(y2),abs(f(i2))));
+<span class="keyword">end</span>
+
+i3 = find(abs(f)&gt;2^(3/4) &amp; abs(f)&lt;=2.4);
+<span class="keyword">if</span> ~isempty(i3)
+    w(i3) = 10.^(spline(x3,log10(y3),abs(f(i3))));
+<span class="keyword">end</span>
+
+i4 = find(abs(f)&gt;2.4);
+<span class="keyword">if</span> ~isempty(i4)
+    w(i4) = 10.^(polyval(pp4,abs(f(i4)))); <span class="comment">% straight line extrap in log10</span>
+<span class="keyword">end</span>
+
+<span class="keyword">if</span> cut1 == 1
+    i = f &lt; 0;
+    w(i) = nan;
+<span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">end</span> <span class="comment">% End of main function</span>
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% weightf_barrick.m
+%  Estimating the weighting function of Barrick 1977
+%
+function w = weightf_barrick(fb,fw,side,cut1)
+%% Call:
+%  w = weightf_barrick(fb,fw,side,[cut1]) 
+%
+%  This function calculates the Barrick's (1977) weighting function
+%  to eliminate the contribution of wave-wave interactions in the second
+%  order peaks of Doppler spectra. 
+% 
+%  The Bragg frequency of the radar (in Hz) is given by fb. fw is the
+%  frequencies (in Hz) of the ocean wave spectrum it is internally converted
+%  to Doppler frequency fd=fw+fb or fd=fw-fb and then to normalized Doppler
+%  frequency v = fd/fb
+%
+%  Digitized (DLC 2018) from Figure 3 in Barrick, D.E., 1977. Extraction of
+%  wave parameters from measured HF radar sea-echo Doppler spectra. Radio
+%  Sci. 12, 415–424. https://doi.org/10.1029/RS012i003p00415
+% 
+%% Inputs
+%  fb   - Bragg Frequency (in Hz) of the HF radar
+%  fw   - Ocean wave frequencies (in Hz)
+%  side - -1 for inner side-band (closer to 0 Hz side of the Bragg peak)
+%         +1 for outer side-band (larger absolute freq. values than fbragg)
+%  cut1 - [optional, default value 0] 
+%          If =1, then it cuts off negative normalized freqs (after crossing 0 Hz)
+%
+%% Outputs
+%  w   - weighting function values
+%
+%% Copyright 
+%  2021 Zaid Al-attabi, Douglas Cahl, George Voulgaris
+%
+%  This program is free software: you can redistribute it and/or modify
+%  it under the terms of the GNU General Public License as published by
+%  the Free Software Foundation, either version 3 of the License, or
+%  (at your option) any later version.
+%
+%  This program is distributed in the hope that it will be useful,
+%  but WITHOUT ANY WARRANTY; without even the implied warranty of
+%  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%  GNU General Public License for more details.
+%
+%  You should have received a copy of the GNU General Public License
+%  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+%
+%%
+if nargin < 4
+    cut1 = 0;
+end
+
+% points from figure digitization in x = f_dopper/f_bragg and y = w
+% 3 curves in log10 of w
+x1 = [0.0821 0.1096 0.1806 0.2888 0.5438 0.6584 0.9199 1.0491 1.1895 1.2993 1.4139];
+y1 = [968.6990 430.6176 94.4144 22.7306 2.1925 1.6220 2.3580 2.6163 2.3580 2.9029 5.1953];
+x2 = [1.4187 1.4752 1.5156 1.5689 1.5979 1.6173 1.6706];
+y2 = [5.1953 2.5097 1.9154 3.5001 7.3211 12.4393 108.0739];
+x3 = [1.6706 1.6851 1.7061 1.7400 1.8158 1.9143 1.9740 2.0886 2.2194 2.3889];
+y3 = [105.8505 37.0486 10.3167 6.5302 5.3599 5.8246 6.7370 8.6458 11.9327 17.8973];
+pp4 = polyfit(x3(end-1:end),log10(y3(end-1:end)),1); % linear in log10 fit for normalized freq > 2.4
+
+% Convert ocean wave frequencies to normalized doppler frequency (fD/fB)
+fw = fw(:);     % ocean wave frequency range
+if side>0       % right side of Bragg peak
+    fD = fw+fb; % radar Doppler frequencies
+else            % left side of Bragg peak
+    fD=fb-fw;   % radar Doppler frequencies
+end
+f = fD/fb;      % normalized radar Doppler freq
+
+w=nan(size(f)); % Pre-allocate array
+
+% extrapolate each continuous curve, in log10 with cubic spline interp
+i1 = find(abs(f)>=0 & abs(f) <=sqrt(2));
+if ~isempty(i1)
+    w(i1) = 10.^(spline(x1,log10(y1),abs(f(i1)))); % spline in log10 space
+end
+
+i2 = find(abs(f) >sqrt(2) & abs(f)<=2^(3/4));
+if ~isempty(i2)
+    w(i2) = 10.^(spline(x2,log10(y2),abs(f(i2))));
+end
+
+i3 = find(abs(f)>2^(3/4) & abs(f)<=2.4);
+if ~isempty(i3)
+    w(i3) = 10.^(spline(x3,log10(y3),abs(f(i3))));
+end
+
+i4 = find(abs(f)>2.4);
+if ~isempty(i4)
+    w(i4) = 10.^(polyval(pp4,abs(f(i4)))); % straight line extrap in log10
+end
+
+if cut1 == 1
+    i = f < 0;
+    w(i) = nan;
+end
+end % End of main function
+##### SOURCE END #####
+--></body></html>
