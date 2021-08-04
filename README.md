@@ -41,11 +41,8 @@ The files are located in three directories:
 
 - Main Functions:  
   ConfigRSWIC.m
-  
   DemoRadarSWIC.m
-  
   masterRadarSWIC.m
-  
   RadarSWIC.m
 
 - Library Functions (../lib):
