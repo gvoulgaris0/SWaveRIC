@@ -13,7 +13,7 @@ Zaid Al-Attabi, Douglas Cahl & George Voulgaris, (2021, July 23). Swell Wave Rad
 - Method Citation:  
 Al-Attabi, Z.R., G. Voulgaris, and D.C. Conley, 2021. Evaluation and Validation of HF Radar Swell and Wind Wave Inversion Method. J. Atmos. Oceanic Technol., https://doi.org/10.1175/JTECH-D-20-0186.1 
 
-Copyright 2021(c) Zaid Alattabi, Douglas Cahl, George Voulgaris
+Copyright 2021(c) Zaid Al-Attabi, Douglas Cahl, George Voulgaris
 
 RadarSWIC is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
