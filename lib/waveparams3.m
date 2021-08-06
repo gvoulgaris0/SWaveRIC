@@ -22,7 +22,7 @@ function [paramsT,paramsS,paramsW] = waveparams3(fc,Sf,f,Df)
 %% Uses
 %  waveparams.m
 %% Copyright 
-%  2021 Zaid Al-attabi, Douglas Cahl, George Voulgaris
+%  2021 Zaid Al-Attabi, Douglas Cahl, George Voulgaris
 %
 %  This program is free software: you can redistribute it and/or modify
 %  it under the terms of the GNU General Public License as published by
