@@ -8,7 +8,7 @@ The wind wave inversion part used in here is very similar to that described in A
 Prior to inversion, the 2nd order Doppler spectrum is separated into the swell and wind wave regions. For each region the inversion takes place separately and then the two (swell and wind wave) inverted spectra are combined to a single wave energy spectrum. The code includes the basic functions and a demo routine that uses the data of events A to H presentd in Al-Attabi et al. (2021) and recreates Figures 14 and 15 in the paper.  These figures might be slightly different (improved) because of a small change in the method used combining the swell and wind inverted spectra when no swell is detected. See comments inside the code for more details.
 
 - Code Citation:  
-Zaid Al-Attabi, Douglas Cahl & George Voulgaris, (2021, July 23). Swell Wave Radar Inversion Code (SWaveRIC) V1.0 (Version V1.0). Zenodo. http://doi.org/cc.cccc/zenodo.xxxxxxx
+Zaid Al-Attabi, Douglas Cahl & George Voulgaris, (2021, July 23). Swell Wave Radar Inversion Code (SWaveRIC) V1.0 (Version V1.0). Zenodo. https://doi.org/10.5281/zenodo.5159955
 
 - Method Citation:  
 Al-Attabi, Z.R., G. Voulgaris, and D.C. Conley, 2021. Evaluation and Validation of HF Radar Swell and Wind Wave Inversion Method. J. Atmos. Oceanic Technol., https://doi.org/10.1175/JTECH-D-20-0186.1 
