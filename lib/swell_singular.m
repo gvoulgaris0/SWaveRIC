@@ -18,7 +18,7 @@ function [fsi,Hswi,Thsi] = swell_singular(fs,Hsw,Ths,thc2,beamdiff,fr)
 %  Hswi:         - swell rms waveheight (m) 
 %  Thsi:         - swell direction (degrees) 
 %
-%% Copyright 2021, Zaid Al-attabi, Douglas Cahl, George Voulgaris
+%% Copyright 2021, Zaid Al-Attabi, Douglas Cahl, George Voulgaris
 %
 %  This program is free software: you can redistribute it and/or modify
 %  it under the terms of the GNU General Public License as published by
