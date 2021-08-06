@@ -32,12 +32,12 @@ function [fs,Hs,theta2,thc2,thc1] = dopLipaS(freq,PXY,PXY2,beam1,beam2,fc,d)
 %
 %  Lipa B.J. and D.E. Barrick (1980), Methods for the extraction of long-period
 %  ocean wave parameters from narrow beam HF radar sea echo. Radio
-%  Sci 15(4):843–853
+%  Sci 15(4):843â€“853
 %
 %  Lipa, B.J., D.E. Barrick, and J.W. Maresca Jr. (1981) HF radar measurements
 %  of long ocean waves. Journal of Geophysical Research, Oceans 86.C5: 4089-4102.
 %
-%% Copyright(r) 2021, Zaid Al-attabi, Douglas Cahl, George Voulgaris
+%% Copyright(r) 2021, Zaid Al-Attabi, Douglas Cahl, George Voulgaris
 %
 %  This program is free software: you can redistribute it and/or modify
 %  it under the terms of the GNU General Public License as published by
