@@ -16,7 +16,7 @@ function w = weightf_barrick(fb,fw,side,cut1)
 %
 %  Digitized (DLC 2018) from Figure 3 in Barrick, D.E., 1977. Extraction of
 %  wave parameters from measured HF radar sea-echo Doppler spectra. Radio
-%  Sci. 12, 415–424. https://doi.org/10.1029/RS012i003p00415
+%  Sci. 12, 415â€“424. https://doi.org/10.1029/RS012i003p00415
 % 
 %% Inputs
 %  fb   - Bragg Frequency (in Hz) of the HF radar
@@ -30,7 +30,7 @@ function w = weightf_barrick(fb,fw,side,cut1)
 %  w   - weighting function values
 %
 %% Copyright 
-%  2021 Zaid Al-attabi, Douglas Cahl, George Voulgaris
+%  2021 Zaid Al-Attabi, Douglas Cahl, George Voulgaris
 %
 %  This program is free software: you can redistribute it and/or modify
 %  it under the terms of the GNU General Public License as published by
