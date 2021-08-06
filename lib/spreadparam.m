@@ -11,8 +11,8 @@ function [s,B] = spreadparam(fp,f1,U10)
 %  U10  = wind speed at 10m elevation (optional)
 
 %% OUTPUT
-%  s    = wave spreading parameter (Hasselmann et al.)
-%  B    = wave spreading parameter (Donelan et al.)
+%  s    = wave spreading parameter (Hasselmann et al. 1980)
+%  B    = wave spreading parameter (Donelan et al. 1985)
 
 %% Program
 
