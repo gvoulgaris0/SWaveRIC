@@ -7,7 +7,7 @@ function [Sfth] = Inverted_2D_DirSpec(fp,th,Df,Sf,f,wspd)
 %  Sf    = wave spectrum S(f)
 %  Df    = Wave direction D(f)
 %  s     = Directional spreading factor
-%  th    = Radar Angle (in Radians)/Ellipse Normal
+%  th    = Radar Angle (in degrees)/Ellipse Normal
 %  model = 1 (use the directional distribution function of cos^2s)
 %        = 2 (use the directional distribution function of sech)
 
