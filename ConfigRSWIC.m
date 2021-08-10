@@ -44,7 +44,7 @@ minf    = 0.02;      % Minimum halfwidth of Bragg Peak
 % This is a common issue in HF systems with high energy at 0 Hz (DC frequencies)
 % it effects inner sidebands only and defines the areas of the inner spectrum to
 % be excluded from analysis
-flim = 0.046; % Hz (Default 0.046 Hz)
+flim = 0.05; % Hz (Default 0.05 Hz)
 
 %% Quality Control for 1st and 2nd order sidbands
 snr1    = 10;   % Threshold signal to noise ratio of 1st order Bragg peaks
